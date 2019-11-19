@@ -160,7 +160,7 @@ public class CryptoClient implements Runnable, ReaderObserver {
 		String method = enterText("Give encryption method", true);
 		String text = enterText("Give text to encrypt", false);
 		String data = createRequest("encrypt", method, text);
-		DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), serverAddr, serverPort);
+		DatagramPacket packet = new DatagramPacket(data.getBytes(), data.getBytes().length, serverAddr, serverPort);
 		socket.send(packet);
 	}
 	
@@ -168,7 +168,7 @@ public class CryptoClient implements Runnable, ReaderObserver {
 		String method = enterText("Give decryption method", true);
 		String text = enterText("Give text to decrypt", false);
 		String data = createRequest("decrypt", method, text);
-		DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), serverAddr, serverPort);
+		DatagramPacket packet = new DatagramPacket(data.getBytes(), data.getBytes().length, serverAddr, serverPort);
 		socket.send(packet);
 	}
 

@@ -90,7 +90,7 @@ public class CryptoServer implements Runnable {
 				} finally {
 					if (null != response && null != sender) {
 						System.out.println("Sending response: " + response);
-						DatagramPacket sendPacket = new DatagramPacket(response.getBytes("UTF-8"), response.length());
+						DatagramPacket sendPacket = new DatagramPacket(response.getBytes("UTF-8"), response.getBytes().length);
 						sendPacket.setAddress(sender);
 						sendPacket.setPort(packet.getPort());
 						try {
