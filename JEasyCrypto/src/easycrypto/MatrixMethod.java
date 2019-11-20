@@ -36,22 +36,24 @@ class MatrixMethod implements CryptoMethod {
     @Override
     public Result decrypt(final String toDecrypt) {
         String toStoreTo = new String();
-        int matrixWidth = (int) Math.floor(Math.sqrt(toDecrypt.length()));
+        int toDecryptLength = toDecrypt.codePointCount(0, toDecrypt.length());
+        int matrixWidth = (int) Math.floor(Math.sqrt(toDecryptLength));
 
         String toRotate;
         String tmp = "";
-        int extraCount = (int) Math.abs(Math.pow(matrixWidth, 2) - toDecrypt.length());
+        int extraCount = (int) Math.abs(Math.pow(matrixWidth, 2) - toDecryptLength);
         if (extraCount > 0) {
-            tmp = toDecrypt.substring(toDecrypt.length() - extraCount, (toDecrypt.length() - extraCount) + extraCount);
+            tmp = toDecrypt.substring(toDecrypt.offsetByCodePoints(0, toDecryptLength - extraCount), toDecrypt.offsetByCodePoints(0, (toDecryptLength - extraCount) + extraCount));
             tmp = new StringBuilder(tmp).reverse().toString();
-            toRotate = toDecrypt.substring(0, toDecrypt.length() - extraCount);
+            toRotate = toDecrypt.substring(0, toDecrypt.offsetByCodePoints(0, toDecryptLength - extraCount));
         } else {
             toRotate = toDecrypt;
         }
         for (int outer = 0; outer < matrixWidth; outer++) {
-            toStoreTo += toRotate.substring(outer, outer + 1);
-            for (int inner = outer + matrixWidth; inner < toRotate.length(); inner += matrixWidth) {
-                toStoreTo += toRotate.substring(inner, inner + 1);
+            toStoreTo += toRotate.substring(toRotate.offsetByCodePoints(0, outer), toRotate.offsetByCodePoints(0, outer + 1));
+            int toRotateLength = toRotate.codePointCount(0, toRotate.length());
+            for (int inner = outer + matrixWidth; inner < toRotateLength; inner += matrixWidth) {
+                toStoreTo += toRotate.substring(toRotate.offsetByCodePoints(0, inner), toRotate.offsetByCodePoints(0, inner + 1));
             }
         }
         if (tmp.length() > 0) {
